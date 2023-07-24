@@ -1,0 +1,4 @@
+venv/
+.vscode/
+secrets.toml
+__pycache__/
