@@ -81,3 +81,8 @@ class CockroachDBConnection(ExperimentalBaseConnection[Connection]):
             columns = [desc[0] for desc in cursor.description]
             return (pd.DataFrame(result, columns=columns))
         return _query(query, **kwargs)
+
+    def execute(self, query: str) -> None:
+        cursor = self.cursor()
+        cursor.execute(query)
+        self._instance.commit()
