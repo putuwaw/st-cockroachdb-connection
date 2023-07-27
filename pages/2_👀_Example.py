@@ -19,6 +19,9 @@ with st.echo():
     # insert into table
     conn.execute("INSERT INTO items (name, price, count) VALUES ('jeans', 23, 50), ('laptop', 499.90, 35), ('camera', 399, 25);")
 
+    # commit transaction
+    conn.commit()
+
 st.write("Let's see what's in the table and display it in the form of a dataframe!")
 
 with st.echo():

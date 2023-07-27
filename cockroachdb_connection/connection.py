@@ -85,4 +85,6 @@ class CockroachDBConnection(ExperimentalBaseConnection[Connection]):
     def execute(self, query: str) -> None:
         cursor = self.cursor()
         cursor.execute(query)
+
+    def commit(self) -> None:
         self._instance.commit()
