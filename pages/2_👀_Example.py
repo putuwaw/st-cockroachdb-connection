@@ -6,9 +6,6 @@ st.write("Now lets use the connection class to query the database.")
 with st.echo():
     from cockroachdb_connection import CockroachDBConnection
     conn = st.experimental_connection("cockroach", type=CockroachDBConnection)
-
-    # delete table
-    conn.execute("DROP TABLE IF EXISTS items;")
     
     # create table
     conn.execute("CREATE TABLE IF NOT EXISTS items (name STRING NOT NULL, price DECIMAL(10,2) NOT NULL, count INT NOT NULL);")
@@ -27,3 +24,5 @@ st.write("Let's see what's in the table and display it in the form of a datafram
 with st.echo():
     df = conn.query("SELECT * FROM items")
     st.dataframe(df)
+
+conn.reset()
