@@ -6,6 +6,7 @@ from .util import extract_conn_kwargs
 from collections import ChainMap
 import pandas as pd
 import psycopg
+import certifi
 
 _ALL_CONNECTION_PARAMS = {
     "url",
@@ -63,11 +64,12 @@ class CockroachDBConnection(ExperimentalBaseConnection[Connection]):
             password = conn_params["password"]
             host = conn_params["host"]
             database = conn_params["database"]
+            sslmode = "verify-full"
 
-            url = f"{dialect}://{username}:{password}@{host}:{port}/{database}"
+            url = f"{dialect}://{username}:{password}@{host}:{port}/{database}?sslmode={sslmode}"
 
         # return connection object
-        return psycopg.connect(url)
+        return psycopg.connect(url, sslrootcert=certifi.where())
 
     def cursor(self) -> Cursor:
         return self._instance.cursor()
@@ -88,3 +90,6 @@ class CockroachDBConnection(ExperimentalBaseConnection[Connection]):
 
     def commit(self) -> None:
         self._instance.commit()
+
+    def reset(self) -> None:
+        return super().reset()
