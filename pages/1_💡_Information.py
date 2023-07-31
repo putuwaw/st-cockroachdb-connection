@@ -24,7 +24,7 @@ st.title("How to Build CockroachDB Connection")
 2. Don't forget to install `streamlit` and `psycopg` package.
 
 ```bash
-pip install streamlit psycopg
+pip install streamlit "psycopg[binary]"
 
 ```
 
@@ -50,6 +50,7 @@ from .util import extract_conn_kwargs
 from collections import ChainMap
 import pandas as pd
 import psycopg
+import certifi
 ```
 
 5.  We also need to create variabel that contains all connection parameters and required connection parameters.
@@ -78,32 +79,47 @@ class CockroachDBConnection(ExperimentalBaseConnection[Connection]):
 
 ```py
 def _connect(self, **kwargs) -> Connection:
+    # get connections params from keyword args
     kwargs_params = extract_conn_kwargs(_ALL_CONNECTION_PARAMS, kwargs)
+
+    # get params from secret
     secret_params = self._secrets.to_dict()
+
+    # all connection params
     conn_params = ChainMap(kwargs_params, secret_params)
+
+    # check if connection params are empty
     if not len(conn_params):
         raise StreamlitAPIException(
             "Missing CockroachDB connection configuration. "
             "Did you forget to set this in `secrets.toml` or as kwargs to `st.experimental_connection`?"
         )
+
     url: str = ""
     if "url" in conn_params:
         url = conn_params["url"]
     else:
+        # check missing req params
         for i in _REQUIRED_CONNECTION_PARAMS:
             if i not in conn_params:
                 raise StreamlitAPIException(
                     f"Missing CockroachDB required connection parameter: {i}"
                     f"Did you forget to set {i} in `secrets.toml` at `[connections.<name>]` section or as kwargs to `st.experimental_connection`?"
                 )
+
+        # construct url
         dialect = conn_params["dialect"] if "dialect" in conn_params else "postgresql"
         port = conn_params["port"] if "port" in conn_params else "26257"
         username = conn_params["username"]
         password = conn_params["password"]
         host = conn_params["host"]
         database = conn_params["database"]
-        url = f"{dialect}://{username}:{password}@{host}:{port}/{database}"
-    return psycopg.connect(url)
+        sslmode = "verify-full"
+
+        url = f"{dialect}://{username}:{password}@{host}:{port}/{database}?sslmode={sslmode}"
+    
+    # return connection object
+    return psycopg.connect(url, sslrootcert=certifi.where())
 ```
 
 8. Add a `_cursor` method to get the underlying connection object.
@@ -127,12 +143,26 @@ def query(self, query: str, ttl: int = 3600, **kwargs) -> pd.DataFrame:
     return _query(query, **kwargs)
 ```
 
-10. Now go to file `__init__.py` and import the connection class.
+10. Add other methods like `execute`, `commit`, `reset` to execute queries and reset the connection.
+
+```py
+def execute(self, query: str) -> None:
+    cursor = self.cursor()
+    cursor.execute(query)
+
+def commit(self) -> None:
+    self._instance.commit()
+
+def reset(self) -> None:
+    return super().reset()
+```
+
+11. Now go to file `__init__.py` and import the connection class.
 
 ```py
 from cockroachdb_connection.connection import CockroachDBConnection
 ```
 
-11. Congratulations, now you can import the connection class in `Home.py` and use it to query. 
+12. Congratulations, now you can import the connection class in `Home.py` and use it to query. 
 Remember to add the parameter to `secrets.toml` in `[connections.<name>]` section. You also can pass it as a keyword argument to `st.experimental_connection`.
 """
