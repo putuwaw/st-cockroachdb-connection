@@ -1,9 +1,20 @@
 import streamlit as st
+from st_pages import Page, show_pages
+
 
 st.set_page_config(
-    page_title='Connections Hackaton',
+    page_title='Example App',
     page_icon='🏠'
 )
+
+show_pages(
+    [
+        Page("app.py", "Home", "🏠"),
+        Page("pages/information.py", "Information", "👀"),
+        Page("pages/example.py", "Example", "💡")
+    ]
+)
+
 
 st.title("CockroachDB Connection")
 
@@ -14,13 +25,13 @@ tab1, tab2 = st.tabs([
 
 with tab1:
     st.markdown(
-        "With `st.experimental_connection` you can connect to a CockroachDB database and query it directly from Streamlit.")
+        "With `st.connection` you can connect to a CockroachDB database and query it directly from Streamlit.")
     st.code(
         """
         import streamlit as st
-        from cockroachdb_connection import CockroachDBConnection
+        from st_cockroachdb_connection import CockroachDBConnection
 
-        conn = st.experimental_connection("cockroach", type=CockroachDBConnection)
+        conn = st.connection("cockroachdb", type=CockroachDBConnection)
         df = conn.query("SELECT price FROM items")
         st.dataframe(df)
         """
@@ -29,7 +40,7 @@ with tab1:
 
 with tab2:
     st.markdown(
-        'Compared to the old way of doing it, which required to write more code.')
+        "Compared to the old way of doing it, which required to write more code.")
     st.code(
         """
         import streamlit as st
@@ -38,7 +49,7 @@ with tab2:
 
         @st.cache_resource
         def init_connection():
-            return psycopg.connect(st.secrets["connections"]["cockroach"]["url"])
+            return psycopg.connect(st.secrets["connections"]["cockroachdb"]["url"])
 
         conn = init_connection()
 
