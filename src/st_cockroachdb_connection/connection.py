@@ -1,4 +1,4 @@
-from streamlit.connections import ExperimentalBaseConnection
+from streamlit.connections import BaseConnection
 from streamlit.errors import StreamlitAPIException
 from streamlit.runtime.caching import cache_data
 from psycopg import Connection, Cursor
@@ -21,11 +21,11 @@ _ALL_CONNECTION_PARAMS = {
 _REQUIRED_CONNECTION_PARAMS = {"username", "password", "host", "database"}
 
 
-class CockroachDBConnection(ExperimentalBaseConnection[Connection]):
+class CockroachDBConnection(BaseConnection[Connection]):
     """
-        Description:
-        The `_connect` function is a utility function designed to establish a connection to a CockroachDB database. 
-        It provides a convenient way to connect to the database and can be used as a building block for interacting with the CockroachDB in Python applications.
+    Description: The `_connect` function is a utility function designed to establish a connection to a CockroachDB
+    database. It provides a convenient way to connect to the database and can be used as a building block for
+    interacting with the CockroachDB in Python applications.
     """
 
     def _connect(self, **kwargs) -> Connection:
@@ -42,7 +42,7 @@ class CockroachDBConnection(ExperimentalBaseConnection[Connection]):
         if not len(conn_params):
             raise StreamlitAPIException(
                 "Missing CockroachDB connection configuration. "
-                "Did you forget to set this in `secrets.toml` or as kwargs to `st.experimental_connection`?"
+                "Did you forget to set this in `secrets.toml` or as kwargs to `st.connection`?"
             )
 
         url: str = ""
@@ -54,7 +54,8 @@ class CockroachDBConnection(ExperimentalBaseConnection[Connection]):
                 if i not in conn_params:
                     raise StreamlitAPIException(
                         f"Missing CockroachDB required connection parameter: {i}"
-                        f"Did you forget to set {i} in `secrets.toml` at `[connections.<name>]` section or as kwargs to `st.experimental_connection`?"
+                        f"Did you forget to set {i} in `secrets.toml` at `[connections.<name>]` section or as kwargs "
+                        f"to `st.connection`?"
                     )
 
             # construct url
@@ -81,7 +82,7 @@ class CockroachDBConnection(ExperimentalBaseConnection[Connection]):
             cursor.execute(query, **kwargs)
             result = cursor.fetchall()
             columns = [desc[0] for desc in cursor.description]
-            return (pd.DataFrame(result, columns=columns))
+            return pd.DataFrame(result, columns=columns)
         return _query(query, **kwargs)
 
     def execute(self, query: str) -> None:

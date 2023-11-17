@@ -4,9 +4,9 @@ st.title("Functional Demo")
 st.write("Now lets use the connection class to query the database.")
 
 with st.echo():
-    from cockroachdb_connection import CockroachDBConnection
-    conn = st.experimental_connection("cockroach", type=CockroachDBConnection)
-    
+    from st_cockroachdb_connection import CockroachDBConnection
+    conn = st.connection("cockroachdb", type=CockroachDBConnection)
+
     # create table
     conn.execute("CREATE TABLE IF NOT EXISTS items (name STRING NOT NULL, price DECIMAL(10,2) NOT NULL, count INT NOT NULL);")
 

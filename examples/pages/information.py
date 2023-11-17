@@ -1,10 +1,5 @@
 import streamlit as st
 
-st.set_page_config(
-    page_title='Information - Connections Hackaton',
-    page_icon='💡'
-)
-
 st.title("How to Build CockroachDB Connection")
 
 """
@@ -18,7 +13,7 @@ st.title("How to Build CockroachDB Connection")
 │   ├── __init__.py
 │   ├── connection.py
 │   └── util.py
-└── Home.py
+└── app.py
 ```
 
 2. Don't forget to install `streamlit` and `psycopg` package.
@@ -42,7 +37,7 @@ def extract_conn_kwargs(params: set, target: dict) -> dict:
 4. Then we will work in the `connection.py` file and import the modules:
 
 ```py
-from streamlit.connections import ExperimentalBaseConnection
+from streamlit.connections import BaseConnection
 from streamlit.errors import StreamlitAPIException
 from streamlit.runtime.caching import cache_data
 from psycopg import Connection, Cursor
@@ -69,10 +64,10 @@ _ALL_CONNECTION_PARAMS = {
 _REQUIRED_CONNECTION_PARAMS = {"username", "password", "host", "database"}
 ```
 
-6. Than we create a new connection class called `CockroachDBConnection` that extends Streamlit's `ExperimentalBaseConnection`
+6. Than we create a new connection class called `CockroachDBConnection` that extends Streamlit's `BaseConnection`
 
 ```py
-class CockroachDBConnection(ExperimentalBaseConnection[Connection]):
+class CockroachDBConnection(BaseConnection[Connection]):
 ```
 
 7. Add a `_connect()` method that sets up and returns the underlying connection object.
@@ -92,7 +87,7 @@ def _connect(self, **kwargs) -> Connection:
     if not len(conn_params):
         raise StreamlitAPIException(
             "Missing CockroachDB connection configuration. "
-            "Did you forget to set this in `secrets.toml` or as kwargs to `st.experimental_connection`?"
+            "Did you forget to set this in `secrets.toml` or as kwargs to `st.connection`?"
         )
 
     url: str = ""
@@ -104,7 +99,7 @@ def _connect(self, **kwargs) -> Connection:
             if i not in conn_params:
                 raise StreamlitAPIException(
                     f"Missing CockroachDB required connection parameter: {i}"
-                    f"Did you forget to set {i} in `secrets.toml` at `[connections.<name>]` section or as kwargs to `st.experimental_connection`?"
+                    f"Did you forget to set {i} in `secrets.toml` at `[connections.<name>]` section or as kwargs to `st.connection`?"
                 )
 
         # construct url
@@ -163,6 +158,6 @@ def reset(self) -> None:
 from cockroachdb_connection.connection import CockroachDBConnection
 ```
 
-12. Congratulations, now you can import the connection class in `Home.py` and use it to query. 
-Remember to add the parameter to `secrets.toml` in `[connections.<name>]` section. You also can pass it as a keyword argument to `st.experimental_connection`.
+12. Congratulations, now you can import the connection class in `app.py` and use it to query. 
+Remember to add the parameter to `secrets.toml` in `[connections.<name>]` section. You also can pass it as a keyword argument to `st.connection`.
 """

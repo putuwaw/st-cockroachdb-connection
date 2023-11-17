@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "st-cockroachdb-connection"
+description = "Streamlit Connection for CockroachDB."
+version = "1.0.1"
+authors = [
+  { name = "Putu Widyantara Artanta Wibawa", email = "putuwaw973@gmail.com" },
+]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+
+]
+keywords = ["streamlit", "cockroachdb", "connection"]
+dependencies = ["streamlit>=1.28.0", "psycopg[binary]"]
+
+[project.optional-dependencies]
+dev = ["pytest", "st-pages"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
+[project.urls]
+Repository = "https://github.com/putuwaw/st-cockroachdb-connection"
+Documentation = "https://experimental-connection.streamlit.app/"
