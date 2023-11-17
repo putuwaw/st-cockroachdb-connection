@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "st-cockroachdb-connection"
 description = "Streamlit Connection for CockroachDB."
-version = "1.0.0"
+version = "1.0.1"
 authors = [
   { name = "Putu Widyantara Artanta Wibawa", email = "putuwaw973@gmail.com" },
 ]
