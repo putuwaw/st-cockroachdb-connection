@@ -9,9 +9,9 @@ st.set_page_config(
 
 show_pages(
     [
-        Page("app.py", "Home", "🏠"),
-        Page("pages/information.py", "Information", "👀"),
-        Page("pages/example.py", "Example", "💡")
+        Page("examples/app.py", "Home", "🏠"),
+        Page("examples/pages/information.py", "Information", "👀"),
+        Page("examples/pages/example.py", "Example", "💡")
     ]
 )
 
@@ -19,7 +19,7 @@ show_pages(
 st.title("CockroachDB Connection")
 
 tab1, tab2 = st.tabs([
-    "🚀 With st.experimental_connection",
+    "🚀 With st.connection",
     "🐢 How it worked before"
 ])
 
