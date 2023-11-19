@@ -19,7 +19,7 @@ st.title("How to Build CockroachDB Connection")
 2. Don't forget to install `streamlit` and `psycopg` package.
 
 ```bash
-pip install streamlit "psycopg[binary]"
+pip install streamlit>=1.28.0 "psycopg[binary]"
 
 ```
 
@@ -48,7 +48,7 @@ import psycopg
 import certifi
 ```
 
-5.  We also need to create variabel that contains all connection parameters and required connection parameters.
+5. We also need to create variabel that contains all connection parameters and required connection parameters.
 
 ```py
 _ALL_CONNECTION_PARAMS = {
@@ -134,7 +134,7 @@ def query(self, query: str, ttl: int = 3600, **kwargs) -> pd.DataFrame:
         cursor.execute(query, **kwargs)
         result = cursor.fetchall()
         columns = [desc[0] for desc in cursor.description]
-        return (pd.DataFrame(result, columns=columns))
+        return pd.DataFrame(result, columns=columns)
     return _query(query, **kwargs)
 ```
 
