@@ -8,7 +8,7 @@ st.title("How to Build CockroachDB Connection")
 ```
 .
 ├── .streamlit/
-│   └── secret.toml
+│   └── secrets.toml
 ├── cockroachdb_connection/
 │   ├── __init__.py
 │   ├── connection.py
