@@ -7,6 +7,8 @@
 ![PyPI - Version](https://img.shields.io/pypi/v/st-cockroachdb-connection?style=for-the-badge)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/st-cockroachdb-connection?style=for-the-badge)
 
+![Repo Images](https://repository-images.githubusercontent.com/670126131/afb8a269-9835-4c5e-b15f-ab954ff455de)
+
 Streamlit Connection for CockroachDB.
 
 ## Features 🚀
