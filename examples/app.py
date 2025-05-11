@@ -7,13 +7,23 @@ st.set_page_config(
     page_icon='🏠'
 )
 
-show_pages(
-    [
-        Page("app.py", "Home", "🏠"),
-        Page("pages/information.py", "Information", "👀"),
-        Page("pages/example.py", "Example", "💡")
-    ]
-)
+if st.secrets["environment"] == "production":
+    show_pages(
+        [
+            Page("examples/app.py", "Home", "🏠"),
+            Page("examples/pages/information.py", "Information", "👀"),
+            Page("examples/pages/example.py", "Example", "💡")
+        ]
+    )
+else:
+    show_pages(
+        [
+            Page("app.py", "Home", "🏠"),
+            Page("pages/information.py", "Information", "👀"),
+            Page("pages/example.py", "Example", "💡")
+        ]
+    )
+
 
 
 st.title("CockroachDB Connection")
