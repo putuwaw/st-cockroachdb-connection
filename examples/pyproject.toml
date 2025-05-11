@@ -1,0 +1,12 @@
+[project]
+name = "examples"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "psycopg[binary]>=3.2.7",
+    "st-cockroachdb-connection>=1.0.1",
+    "st-pages>=0.5.0",
+    "streamlit==1.28.0",
+]

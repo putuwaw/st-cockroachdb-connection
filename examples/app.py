@@ -9,9 +9,9 @@ st.set_page_config(
 
 show_pages(
     [
-        Page("examples/app.py", "Home", "🏠"),
-        Page("examples/pages/information.py", "Information", "👀"),
-        Page("examples/pages/example.py", "Example", "💡")
+        Page("app.py", "Home", "🏠"),
+        Page("pages/information.py", "Information", "👀"),
+        Page("pages/example.py", "Example", "💡")
     ]
 )
 

@@ -18,17 +18,17 @@ git clone https://github.com/putuwaw/st-cockroachdb-connection.git
 - Install the requirements:
 
 ```bash
-pip install -r examples/requirements.txt
+pip install -r requirements.txt
 ```
 
 - Configure Streamlit secrets:
 
 ```bash
-cp examples/.streamlit/secrets.example.toml examples/.streamlit/secrets.toml
+cp .streamlit/secrets.example.toml .streamlit/secrets.toml
 ```
 
 - Run the app:
 
 ```bash
-streamlit run examples/app.py
+streamlit run app.py
 ```
